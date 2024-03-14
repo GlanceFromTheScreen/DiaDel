@@ -1,9 +1,9 @@
 TERMINALS:
     number ::= '[1-9]\d*';
-    operation ::= '[\+\*]';
+    operation ::= '[\+\*\-]';
     terminator ::= ','.
 
-KEYS: '+'; '*'; ','.
+KEYS: '+'; '*'; ','; '-'.
 
 NONTERMINALS:
     EXPRESSIONS;

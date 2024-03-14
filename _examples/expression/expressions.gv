@@ -2,9 +2,14 @@ digraph EXPRESSIONS {
     start [label=EXPRESSIONS shape=plaintext]
     A [label=EXPRESSION shape=box]
     B [label="," shape=oval]
+    C [label=EXPRESSION1 shape=oval]
     end [label="" shape=point]
     start -> A
     A -> B
     B -> A
+    start -> C
+    C -> B
+    B -> C
     A -> end
+    C -> end
 }

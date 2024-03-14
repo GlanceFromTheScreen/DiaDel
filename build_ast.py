@@ -12,6 +12,10 @@ import json
 import pathlib
 import os
 
+#  python .\build_ast.py -c C:\Users\Le\Desktop\expr.txt -j C:\Users\Le\Desktop\AppMath\DiaDeL\CODE\dsl_generator\_examples\expression\expression.json
+
+os.environ["PATH"] += os.pathsep + r'C:\Program Files\Graphviz\bin'
+
 
 def __RenderTokenStream(diagramName, tokenList, debugInfoDir):
     if debugInfoDir is None:

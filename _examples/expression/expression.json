@@ -2,7 +2,7 @@
     "syntax": {
         "type": "virt",
         "info": {
-            "supportInfo": "_examples/expression/rbnf.sgi",
+            "supportInfo": "_examples/expression/expression.sgi",
             "diagrams": "_examples/expression"
         }
     },

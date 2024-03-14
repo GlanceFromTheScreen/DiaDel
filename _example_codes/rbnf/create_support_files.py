@@ -1,5 +1,5 @@
 from scanner import Tokenize
-from afterscan import Afterscan
+from afterscan.afterscan import Afterscan
 from dsl_token import *
 from syntax import *
 import dsl_info
