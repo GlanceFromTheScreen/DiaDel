@@ -30,6 +30,6 @@ def Afterscan(tokenList):
 
     tmp = __ReplaceOneToken(tokenList, lambda token: __ReplaceKeywords(terminalMap, token))
     for token in tmp:
-        if Token.Type.TERMINAL == token.type and dsl_info.Terminal.number == token.terminalType:
-            token.attribute = int(token.str)
+        if Token.Type.TERMINAL == token.type:
+            token.attribute = token.str
     return tmp

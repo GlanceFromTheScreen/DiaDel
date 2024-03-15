@@ -2,31 +2,27 @@ from enum import Enum
 
 
 class Terminal(Enum):
-    number = "number"
-    operation = "operation"
+    user_class = "user_class"
+    diadel_class = "diadel_class"
     terminator = "terminator"
 
 
 tokenRegularExpressions = [
-    (Terminal.number, r"[1-9]\d*"),
-    (Terminal.operation, r"[\+\*\-]"),
-    (Terminal.terminator, r",")
+    (Terminal.user_class, r"[a-zA_Z0-9]+"),
+    (Terminal.diadel_class, r"&[a-zA_Z0-9]+"),
+    (Terminal.terminator, r"[\;\:]")
 ]
 
 
 keys = [
-    ("+", Terminal.operation),
-    ("*", Terminal.operation),
-    ("-", Terminal.operation),
-    (",", Terminal.terminator),
+    (":", Terminal.terminator),
+    (";", Terminal.terminator),
 ]
 
 
 class Nonterminal(Enum):
-    EXPRESSIONS = 'EXPRESSIONS'
-    EXPRESSION = 'EXPRESSION'
-    EXPRESSION1 = 'EXPRESSION1'
-    TERM = 'TERM'
+    DIADEL_PROG = 'DIADEL_PROG'
+    LINE = 'LINE'
 
 
-axiom = Nonterminal.EXPRESSIONS
+axiom = Nonterminal.DIADEL_PROG

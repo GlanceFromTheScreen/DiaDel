@@ -12,7 +12,7 @@ import json
 import pathlib
 import os
 
-#  python .\build_ast.py -c C:\Users\Le\Desktop\expr.txt -j C:\Users\Le\Desktop\AppMath\DiaDeL\CODE\dsl_generator\_examples\expression\expression.json
+#  python .\build_ast.py -c C:\Users\Le\Desktop\expr.txt -j C:\Users\Le\Desktop\AppMath\DiaDeL\CODE\dsl_generator\_examples\expression\diadel.json
 
 os.environ["PATH"] += os.pathsep + r'C:\Program Files\Graphviz\bin'
 
@@ -103,12 +103,12 @@ with open(args.codeFile, 'r') as codeFile:
     code = codeFile.read()
 
 tokenList = Tokenize(code)
-__RenderTokenStream('token_stream_after_scanner', tokenList, debugInfoDir)
+# __RenderTokenStream('token_stream_after_scanner', tokenList, debugInfoDir)
 tokenList = Afterscan(tokenList)
 __RenderTokenStream('token_stream_after_afterscan', tokenList, debugInfoDir)
 
 ast = BuildAst(syntaxInfo, dsl_info.axiom, tokenList)
-__RenderAst('ast', ast, debugInfoDir)
+# __RenderAst('ast', ast, debugInfoDir)
 attributor.SetAttributes(ast, attribute_evaluator.attributesMap)
 __RenderAst('ast_attributed', ast, debugInfoDir)
 

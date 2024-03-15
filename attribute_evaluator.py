@@ -27,12 +27,11 @@ def __Substr(attributes):
         res -= num
     return res
 
-
+def __Kostil(attributes):
+    return "kostil"
 
 
 attributesMap = {
-    Nonterminal.TERM : __Multiple,
-    Nonterminal.EXPRESSION : __Add,
-    Nonterminal.EXPRESSION1 : __Substr,
-    Nonterminal.EXPRESSIONS : __RemoveNones
+    Nonterminal.DIADEL_PROG: __Kostil,
+    Nonterminal.LINE: __Kostil
 }

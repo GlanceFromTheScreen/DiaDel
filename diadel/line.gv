@@ -1,0 +1,11 @@
+digraph LINE {
+    start [label=LINE shape=plaintext]
+    A [label=user_class shape=diamond]
+    B [label=":" shape=oval]
+    C [label=diadel_class shape=diamond]
+    end [label="" shape=point]
+    start -> A
+    A -> B
+    B -> C
+    C -> end
+}

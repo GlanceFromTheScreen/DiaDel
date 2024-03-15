@@ -25,7 +25,11 @@ def __BuildAstElement(grammarDescription, nonterminal, tokenList, start, end):
         newToken = tokenList[start]
         exit = None
         success = False
-        for next in node.nextNodes:
+        for next in node.nextNodes:  # итереируемся по EXPRESSIONS с EXPRESSION и EXPRESSION1 ...
+            # if next[0].str == 'EXPRESSION1':
+            #     start-=1
+            # else:
+            #     pass
             if NodeType.END == next[0].type:
                 exit = next
                 continue
@@ -69,7 +73,7 @@ def __BuildAstElement(grammarDescription, nonterminal, tokenList, start, end):
                         exit = findEnd[0]
                 except Exception:
                     continue
-                break
+                # break
         if success:
             continue
         if exit:

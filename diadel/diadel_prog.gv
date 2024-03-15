@@ -1,0 +1,10 @@
+digraph DIADEL_PROG {
+    start [label=DIADEL_PROG shape=plaintext]
+    A [label=LINE shape=box]
+    B [label=";" shape=oval]
+    end [label="" shape=point]
+    start -> A
+    A -> B
+    B -> A
+    B -> end
+}

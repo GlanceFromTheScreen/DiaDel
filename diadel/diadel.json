@@ -1,0 +1,10 @@
+{
+    "syntax": {
+        "type": "virt",
+        "info": {
+            "supportInfo": "cat",
+            "diagrams": "diadel/"
+        }
+    },
+    "debugInfoDir": "_debug"
+}
