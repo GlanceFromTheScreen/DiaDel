@@ -1,0 +1,4 @@
+state{id=1, text="STArT"} # arrow{} # state{id=2, text="END"};
+automata{id=3, text="AUTO"} # include{} # state{id=2, text="END"};
+automata{id=3, text="AUTO"} # include{} # state{id=1, text="START"};
+

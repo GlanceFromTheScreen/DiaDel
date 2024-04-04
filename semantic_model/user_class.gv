@@ -1,0 +1,24 @@
+digraph USER_CLASS {
+    start [label=USER_CLASS shape=plaintext]
+    X [label=user_class_name shape=diamond]
+    A [label="{" shape=oval]
+    B [label="}" shape=oval]
+    C [label="id=" shape=oval]
+    D [label=INT shape=diamond]
+    E [label="text=" shape=oval]
+    F [label=STR shape=diamond]
+    G [label="," shape=oval]
+    end [label="" shape=point]
+    start -> X
+    X -> A
+    A -> B
+    B -> end
+    A -> C
+    C -> D
+    D -> G
+    G -> E
+    E -> F
+    F -> B
+    D -> B
+    A -> E
+}

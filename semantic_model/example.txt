@@ -1,0 +1,4 @@
+start{id=13} # =>{} # action{id=12, text="a = 5"};
+action{id=12, text="a = 5"} # =>{} # action{id=11, text="b=3"};
+action{id=11, text="b=3"} # =>{} # action{id=10, text="c=a"};
+action{id=10, text="c=a"} # =>{} # end{id=14};

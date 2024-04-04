@@ -2,27 +2,38 @@ from enum import Enum
 
 
 class Terminal(Enum):
-    user_class = "user_class"
-    diadel_class = "diadel_class"
+    user_class_name = "user_class_name"
     terminator = "terminator"
+    STR = "STR"
+    INT = "INT"
+    # ID = "ID"
+    # TEXT = "TEXT"
 
 
 tokenRegularExpressions = [
-    (Terminal.user_class, r"[a-zA_Z0-9]+"),
-    (Terminal.diadel_class, r"&[a-zA_Z0-9]+"),
-    (Terminal.terminator, r"[\;\:]")
+    (Terminal.terminator, r"id=|text=|[\,\{\}\;\#]"),
+    (Terminal.user_class_name, r"[a-z=><]+"),
+    (Terminal.STR, r'"[^"]*"'),
+    (Terminal.INT, r"[0-9]+"),
 ]
 
 
 keys = [
-    (":", Terminal.terminator),
+    ("id=", Terminal.terminator),
+    ("text=", Terminal.terminator),
+    (",", Terminal.terminator),
     (";", Terminal.terminator),
+    ("{", Terminal.terminator),
+    ("}", Terminal.terminator),
+    ("\"", Terminal.terminator),
+    ("#", Terminal.terminator),
 ]
 
 
 class Nonterminal(Enum):
-    DIADEL_PROG = 'DIADEL_PROG'
-    LINE = 'LINE'
+    USER_CLASS = 'USER_CLASS'
+    CONNECTION = 'CONNECTION'
+    INSTANCE = 'INSTANCE'
 
 
-axiom = Nonterminal.DIADEL_PROG
+axiom = Nonterminal.INSTANCE

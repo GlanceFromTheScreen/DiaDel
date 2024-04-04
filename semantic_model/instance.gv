@@ -1,0 +1,10 @@
+digraph INSTANCE {
+    start [label=INSTANCE shape=plaintext]
+    A [label=CONNECTION shape=box]
+    B [label=";" shape=oval]
+    end [label="" shape=point]
+    start -> A
+    A -> B
+    B -> A
+    B -> end
+}

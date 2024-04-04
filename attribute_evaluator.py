@@ -20,18 +20,12 @@ def __Add(attributes):
         res += num
     return res
 
-def __Substr(attributes):
-    attributes = __RemoveNones(attributes)
-    res = 0
-    for num in attributes:
-        res -= num
-    return res
-
-def __Kostil(attributes):
-    return "kostil"
+def __Vanilla(attributes):
+    return "CAT"
 
 
 attributesMap = {
-    Nonterminal.DIADEL_PROG: __Kostil,
-    Nonterminal.LINE: __Kostil
+    Nonterminal.INSTANCE : __Vanilla,
+    Nonterminal.USER_CLASS : __Vanilla,
+    Nonterminal.CONNECTION : __Vanilla,
 }

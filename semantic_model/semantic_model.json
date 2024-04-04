@@ -3,9 +3,8 @@
         "type": "virt",
         "info": {
             "supportInfo": "cat",
-            "diagrams": "diadel/"
+            "diagrams": "semantic_model/"
         }
     },
     "debugInfoDir": "_debug"
 }
-

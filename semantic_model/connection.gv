@@ -1,0 +1,15 @@
+digraph CONNECTION {
+    start [label=CONNECTION shape=plaintext]
+    A [label=USER_CLASS shape=box]
+    B [label="#" shape=oval]
+    C [label=USER_CLASS shape=box]
+    D [label="#" shape=oval]
+    E [label=USER_CLASS shape=box]
+    end [label="" shape=point]
+    start -> A
+    A -> B
+    B -> C
+    C -> D
+    D -> E
+    E -> end
+}
