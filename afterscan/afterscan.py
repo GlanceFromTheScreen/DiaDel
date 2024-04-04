@@ -31,5 +31,8 @@ def Afterscan(tokenList):
     tmp = __ReplaceOneToken(tokenList, lambda token: __ReplaceKeywords(terminalMap, token))
     for token in tmp:
         if Token.Type.TERMINAL == token.type:
-            token.attribute = token.str
+            if token.str[0] == "'" and token.str[-1] == "'" or token.str[0] == '"' and token.str[-1] == '"':
+                token.attribute = token.str[1:-1]
+            else:
+                token.attribute = token.str
     return tmp

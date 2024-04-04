@@ -12,6 +12,9 @@ import json
 import pathlib
 import os
 
+import requests
+import webbrowser
+
 #  python .\build_ast.py -c C:\Users\Le\Desktop\expr.txt -j C:\Users\Le\Desktop\AppMath\DiaDeL\CODE\dsl_generator\_examples\expression\diadel.json
 
 os.environ["PATH"] += os.pathsep + r'C:\Program Files\Graphviz\bin'
@@ -135,6 +138,7 @@ objects = {
 def tree_traverse(ast):
     vars_dict = {}
     connections_list = []
+    connections_dict = {}
     for connection in ast.childs:
         if hasattr(connection, 'nonterminalType') and connection.nonterminalType.name == 'CONNECTION':
             ids = []
@@ -143,7 +147,7 @@ def tree_traverse(ast):
                     pass
                 else:
                     vars_dict[user_class.childs[3].attribute] = {
-                        'text': user_class.childs[6].attribute if len(user_class.childs) > 5 else '""',
+                        'text': user_class.childs[6].attribute if len(user_class.childs) > 5 else "",
                         'shape': objects[types_dict[user_class.childs[0].attribute]]['shape'],
                         'color': objects[types_dict[user_class.childs[0].attribute]]['color'],
                         'include': []
@@ -151,23 +155,26 @@ def tree_traverse(ast):
                 ids.append(user_class.childs[3].attribute)
             if types_dict[connection.childs[2].childs[0].attribute] == 'ARROW':
                 connections_list += [ids]
+                connections_dict[tuple(ids)] = connection.childs[2].childs[3].attribute if len(connection.childs[2].childs) > 4 else ""
             if types_dict[connection.childs[2].childs[0].attribute] == 'INCLUDE':
                 vars_dict[ids[0]]['include'].append(ids[1])
 
-    return vars_dict, connections_list
+    return vars_dict, connections_dict
 
-def get_dot_str(dict_, arr_):
+import requests
+import webbrowser
+def get_dot_str(dict_, arrow_dict):
     object_dict = {}
     include_dict = {}
     init_str = f""""""
     for key, value in dict_.items():
 
-        object_dict[key] = f'A{key}[label={dict_[key]["text"]}, shape={dict_[key]["shape"]}, color={dict_[key]["color"]}]'
+        object_dict[key] = f'A{key}[label="{dict_[key]["text"]}", shape={dict_[key]["shape"]}, color={dict_[key]["color"]}]'
 
         if not dict_[key]['include']:
             init_str += object_dict[key] + '\n'+' '
         else:
-            include_dict[key] = f""" subgraph A{key} {{ label={dict_[key]['text']} color={dict_[key]['color']}
+            include_dict[key] = f""" subgraph cluster_A{key} {{ label="{dict_[key]['text']}" color={dict_[key]['color']}
             """
     for key, value in include_dict.items():
         for include_item in dict_[key]['include']:
@@ -177,11 +184,18 @@ def get_dot_str(dict_, arr_):
     for include_item in include_dict.values():
         include_str+=include_item
     arrow_str = """"""
-    for tup in arr_:
-        arrow_str+=f'A{tup[0]}->A{tup[1]}\n'
+    for key,value in arrow_dict.items():
+        arrow_str+=f'A{key[0]}->A{key[1]} [label="{value}"] \n'
 #         print(arrow_str)
     result_str = 'digraph G{ \n'+init_str + '\n' + include_str + '\n' + arrow_str + '}'
     print(result_str)
+    response = requests.get('https://quickchart.io/graphviz?graph='+result_str)
+    webbrowser.open(response.url)
+
+
+def vizualize_dot(dot_str):
+    response = requests.get("https://quickchart.io/graphviz?graph=" + dot_str)
+    webbrowser.open(response.url)
 
 
 parser = ArgumentParser(prog="create_ast", description="Create AST")
@@ -205,19 +219,21 @@ with open(args.codeFile, 'r') as codeFile:
     code = codeFile.read()
 
 tokenList = Tokenize(code)
-__RenderTokenStream('token_stream_after_scanner', tokenList, debugInfoDir)
+# __RenderTokenStream('token_stream_after_scanner', tokenList, debugInfoDir)
 tokenList = Afterscan(tokenList)
-__RenderTokenStream('token_stream_after_afterscan', tokenList, debugInfoDir)
+# __RenderTokenStream('token_stream_after_afterscan', tokenList, debugInfoDir)
 
 ast = BuildAst(syntaxInfo, dsl_info.axiom, tokenList)
-__RenderAst('ast', ast, debugInfoDir)
+# __RenderAst('ast', ast, debugInfoDir)
 attributor.SetAttributes(ast, attribute_evaluator.attributesMap)
 __RenderAst('ast_attributed', ast, debugInfoDir)
 
 # processed_tree = tree_processing(ast)
 # print(processed_tree)
+
 vars, conns = tree_traverse(ast)
-print('\nDOT CODE:\n')
+print(vars)
+print(conns)
 get_dot_str(vars, conns)
 
 if debugInfoDir is not None and "semantics" in jsonData and "virt" == jsonData["semantics"]["type"]:
