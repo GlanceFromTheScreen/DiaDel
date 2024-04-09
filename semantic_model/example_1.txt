@@ -1,0 +1,12 @@
+state{id=1, text="ready"} # arrow{text="[allowed(in s : Volume, out b : Boolean)] need(out s : Volume) provided(in s : Volume)"} # state{id=2, text="busy"};
+state{id=1, text="ready"} # arrow{text="else / provided(in d : Product) "} # state{id=3, text="error"};
+state{id=2, text="busy"} # arrow{text="reject(in s : Volume)"} # state{id=3, text="error"};
+state{id=2, text="busy"} # arrow{text="[fit(in d : Product, out b : Boolean)] supply(in d : Product) consume(in d : Product)"} # state{id=1, text="ready"};
+state{id=2, text="busy"} # arrow{text="else / provided(in d : Product) "} # state{id=3, text="error"};
+
+automata{id=5, text="CONSUMER"} # include{} # state{id=1, text="ready"};
+automata{id=5, text="CONSUMER"} # include{} # state{id=2, text="busy"}; 
+automata{id=5, text="CONSUMER"} # include{} # state{id=3, text="error"}; 
+
+automata{id=1, text="CONSUMER"} # include{} # variables{id=5 text="var i: integer = 1,0;"}; 
+automata{id=1, text="CONSUMER"} # include{} # variables{id=5 text="const m:string = 'cat'"};

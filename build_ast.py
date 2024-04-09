@@ -1,24 +1,10 @@
-from scanner import Tokenize
-from afterscan import Afterscan
-from dsl_token import *
 from syntax import *
-import dsl_info
-import attributor
-import attribute_evaluator
-
 import graphviz
-from argparse import ArgumentParser
-import json
-import pathlib
 import os
-
 import requests
 import webbrowser
 
-#  python .\build_ast.py -c C:\Users\Le\Desktop\expr.txt -j C:\Users\Le\Desktop\AppMath\DiaDeL\CODE\dsl_generator\_examples\expression\diadel.json
-
 os.environ["PATH"] += os.pathsep + r'C:\Program Files\Graphviz\bin'
-
 
 def __RenderTokenStream(diagramName, tokenList, debugInfoDir):
     if debugInfoDir is None:
@@ -106,36 +92,7 @@ def tree_processing(ast):
     return d
 
 
-"""
-{
-    1: {'text': 'start', 'shape': rect, 'color': black, 'include': [3,4]},
-    2: {'text': 'end', 'shape': rect, 'color': black, 'include': []},
-}
-
-[
-    (1,2),
-]
-"""
-
-types_dict = {
-    'state': 'RECT',
-    'arrow': 'ARROW',
-    'include': 'INCLUDE',
-    'automata': 'RECT',
-    'start': 'CIRCLE',
-    'action': 'RECT',
-    'end': 'CIRCLE',
-    '=>': 'ARROW',
-    'variables': 'CIRCLE'
-}
-
-objects = {
-    'RECT': {'shape': 'rect', 'color': 'black'},
-    'CIRCLE': {'shape': 'circle', 'color': 'blue'}
-}
-
-
-def tree_traverse(ast):
+def tree_traverse(types_dict, objects, ast):
     vars_dict = {}
     connections_list = []
     connections_dict = {}
@@ -150,7 +107,8 @@ def tree_traverse(ast):
                         'text': user_class.childs[6].attribute if len(user_class.childs) > 5 else "",
                         'shape': objects[types_dict[user_class.childs[0].attribute]]['shape'],
                         'color': objects[types_dict[user_class.childs[0].attribute]]['color'],
-                        'include': []
+                        'include': [],
+                        'style': objects[types_dict[user_class.childs[0].attribute]]['style']
                     }
                 ids.append(user_class.childs[3].attribute)
             if types_dict[connection.childs[2].childs[0].attribute] == 'ARROW':
@@ -161,15 +119,14 @@ def tree_traverse(ast):
 
     return vars_dict, connections_dict
 
-import requests
-import webbrowser
+
 def get_dot_str(dict_, arrow_dict):
     object_dict = {}
     include_dict = {}
     init_str = f""""""
     for key, value in dict_.items():
 
-        object_dict[key] = f'A{key}[label="{dict_[key]["text"]}", shape={dict_[key]["shape"]}, color={dict_[key]["color"]}]'
+        object_dict[key] = f'A{key}[label="{dict_[key]["text"]}", shape={dict_[key]["shape"]}, style={dict_[key]["style"] if dict_[key]["style"] else 0}, color={dict_[key]["color"]}]'
 
         if not dict_[key]['include']:
             init_str += object_dict[key] + '\n'+' '
@@ -186,57 +143,12 @@ def get_dot_str(dict_, arrow_dict):
     arrow_str = """"""
     for key,value in arrow_dict.items():
         arrow_str+=f'A{key[0]}->A{key[1]} [label="{value}"] \n'
-#         print(arrow_str)
     result_str = 'digraph G{ \n'+init_str + '\n' + include_str + '\n' + arrow_str + '}'
     print(result_str)
     response = requests.get('https://quickchart.io/graphviz?graph='+result_str)
     webbrowser.open(response.url)
 
 
-def vizualize_dot(dot_str):
-    response = requests.get("https://quickchart.io/graphviz?graph=" + dot_str)
-    webbrowser.open(response.url)
 
 
-parser = ArgumentParser(prog="create_ast", description="Create AST")
-parser.add_argument("-c", "--code", dest="codeFile", help="File with code", metavar="FILE", required=True)
-parser.add_argument("-j", "--json", dest="jsonFile", help="Json file with settings", metavar="FILE", required=True)
-args = parser.parse_args()
 
-with open(args.jsonFile, 'r') as jsonFile:
-    jsonData = json.loads(jsonFile.read())
-
-syntaxInfo = GetSyntaxDesription(jsonData["syntax"])
-
-if "debugInfoDir" in jsonData:
-    debugInfoDir = pathlib.Path(jsonData["debugInfoDir"])
-    if not debugInfoDir.exists():
-        os.mkdir(debugInfoDir)
-else:
-    debugInfoDir = None
-
-with open(args.codeFile, 'r') as codeFile:
-    code = codeFile.read()
-
-tokenList = Tokenize(code)
-# __RenderTokenStream('token_stream_after_scanner', tokenList, debugInfoDir)
-tokenList = Afterscan(tokenList)
-# __RenderTokenStream('token_stream_after_afterscan', tokenList, debugInfoDir)
-
-ast = BuildAst(syntaxInfo, dsl_info.axiom, tokenList)
-# __RenderAst('ast', ast, debugInfoDir)
-attributor.SetAttributes(ast, attribute_evaluator.attributesMap)
-__RenderAst('ast_attributed', ast, debugInfoDir)
-
-# processed_tree = tree_processing(ast)
-# print(processed_tree)
-
-vars, conns = tree_traverse(ast)
-print(vars)
-print(conns)
-get_dot_str(vars, conns)
-
-if debugInfoDir is not None and "semantics" in jsonData and "virt" == jsonData["semantics"]["type"]:
-    rCode = __GetRCode(ast)
-    with open(f"{debugInfoDir}/r_code.py", 'w') as codeFile:
-        codeFile.write(rCode)

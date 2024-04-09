@@ -1,4 +1,7 @@
-start{id=13} # =>{} # action{id=12, text="a = 5"};
-action{id=12, text="a = 5"} # =>{} # action{id=11, text="b=3"};
-action{id=11, text="b=3"} # =>{} # action{id=10, text="c=a"};
-action{id=10, text="c=a"} # =>{} # end{id=14};
+start{id=2} # =>{} # decision{id=3};
+decision{id=3} # =>{text="[b=0]"} # action{id=4, text="assign(res,a)"};
+decision{id=3} # => {text="[else]"} # action{id=5, text="assign(res, GCD(b, a mod b))"};
+action{id=4, text="assign(res,a)"} # =>{} # merge{id=6};
+action{id=5, text="assign(res, GCD(b, a mod b))"} # =>{} # merge{id=6};
+merge{id=6} # =>{} # action{id=7, text="return res"};
+action{id=7, text="return res"} # =>{} # end{id=8};
